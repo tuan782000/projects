@@ -20,3 +20,7 @@ export class Menu {
 }
 
 export const MenuSchema = SchemaFactory.createForClass(Menu);
+
+// Menus - phân biệt đồ ăn, đồ uống, đồ tráng miệng
+// MenuItems - món cụ thể
+// MenuOptions - topping thêm cho món ăn

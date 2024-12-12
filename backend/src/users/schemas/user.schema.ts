@@ -9,7 +9,7 @@ export class User {
     name: string;
 
     @Prop()
-    email: string;
+    email: string; // email - duy nhất
 
     @Prop()
     password: string;
@@ -23,20 +23,20 @@ export class User {
     @Prop()
     image: string;
 
-    @Prop()
-    role: string;
+    @Prop({ default: 'USER' })
+    role: string; // user và admin
 
-    @Prop()
-    accountType: string;
+    @Prop({ default: 'LOCAL' })
+    accountType: string; // local: "đăng nhập email password", google, github
 
-    @Prop()
-    isActive: string;
+    @Prop({ default: false })
+    isActive: boolean; // email - xác thực - chuyển từ false -> true
 
     @Prop()
     codeId: string;
 
     @Prop()
-    codeExpired: Date;
+    codeExpired: Date; // code gửi tới email sẽ hết hạn 5p
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
