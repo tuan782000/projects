@@ -7,6 +7,9 @@ import { Model } from 'mongoose';
 import { hashPassword } from '@/utils/hashPassword';
 import aqp from 'api-query-params'; // hỗ trợ query
 import mongoose from 'mongoose';
+import { CreateAuthDto } from '@/auth/dto/create-auth.dto';
+import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {
@@ -112,5 +115,40 @@ export class UsersService {
         } else {
             throw new BadRequestException('Invalid _id');
         }
+    }
+
+    async handleRegister(registerDto: CreateAuthDto) {
+        const { name, email, password } = registerDto;
+        // console.log(createUserDto);
+
+        // check user email
+        const isExist = await this.isEmailExit(email);
+
+        // nếu isExist là true là email này tồn tại ném exception
+        if (isExist) {
+            throw new BadRequestException(
+                `Email is existing: ${email}. Please choose another email`
+            );
+        }
+
+        // hashed password
+        const hashedPassword = await hashPassword(password);
+        // console.log(hashedPassword);
+
+        const user = await this.userModel.create({
+            name,
+            email,
+            password: hashedPassword,
+            isActive: false,
+            codeId: uuidv4(),
+            codeExpired: dayjs().add(1, 'D')
+        });
+
+        // trả phản hồi
+        return {
+            _id: user._id
+        };
+
+        // send email
     }
 }

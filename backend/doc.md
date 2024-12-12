@@ -31,3 +31,23 @@ yarn add @types/bcrypt --dev
 yarn add --exact api-query-params@5.4.0
 
 yarn add --exact @nestjs/jwt@10.2.0
+
+yarn add --exact @nestjs/passport@10.0.3 passport@0.7.0 passport-local@1.0.0
+
+yarn add --dev @types/passport-local
+
+yarn add --exact @nestjs/jwt@10.2.0 passport-jwt@4.0.1
+
+yarn add --dev @types/passport-jwt
+
+passport (Middleware)
+
+có nghĩa là cần xác định người này là ai mới cho vào - sau đó kèm với quyền
+
+Đăng nhập: thì dùng passport local
+
+gửi token: thì dùng passport jwt
+
+yarn add --exact dayjs@1.11.12 uuid@10.0.0
+
+yarn add --dev @types/uuid
