@@ -52,7 +52,12 @@ export class AuthController {
             // from: '',
             subject: 'Testing',
             text: 'Welcome',
-            html: '<b>Hello world</b>'
+            // html: '<b>Hello world</b>'
+            template: 'register',
+            context: {
+                name: 'Tuan',
+                activationCode: 123456
+            }
         });
         return 'ok';
     }

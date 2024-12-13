@@ -10,10 +10,14 @@ import mongoose from 'mongoose';
 import { CreateAuthDto } from '@/auth/dto/create-auth.dto';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+    constructor(
+        @InjectModel(User.name) private userModel: Model<User>,
+        private readonly mailerService: MailerService
+    ) {}
 
     isEmailExit = async (email: string) => {
         const user = await this.userModel.exists({ email });
@@ -134,21 +138,32 @@ export class UsersService {
         // hashed password
         const hashedPassword = await hashPassword(password);
         // console.log(hashedPassword);
+        const codeId = uuidv4();
 
         const user = await this.userModel.create({
             name,
             email,
             password: hashedPassword,
             isActive: false,
-            codeId: uuidv4(),
-            codeExpired: dayjs().add(1, 'D')
+            codeId: codeId,
+            codeExpired: dayjs().add(5, 'minutes')
         });
 
-        // trả phản hồi
-        return {
-            _id: user._id
-        };
-
         // send email
+        this.mailerService.sendMail({
+            to: user.email,
+            // from: '',
+            subject: 'Activate your account at @tuannguyendev',
+            // html: '<b>Hello world</b>'
+            template: 'register',
+            context: {
+                name: user.name || user.email,
+                activationCode: codeId
+            }
+        });
+        // trả phản hồi
+        // return {
+        //     _id: user._id
+        // };
     }
 }
