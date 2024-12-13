@@ -16,10 +16,14 @@ import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { JwtAuthGuard } from './passport/jwt-auth.guard';
 import { Public } from '@/decorator/customize';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly mailerService: MailerService
+    ) {}
     // b1 truy cập vào đường dẫn gửi lên thông tin
     @Post('login')
     @Public() // cái này mình tự viết - để tránh phân quyền cho chức năng login
@@ -38,5 +42,18 @@ export class AuthController {
     @Public() // ai cũng có thể dùng được - không yêu cầu token
     register(@Body() registerDto: CreateAuthDto) {
         return this.authService.register(registerDto);
+    }
+
+    @Get('mail')
+    @Public() // ai cũng có thể dùng được - không yêu cầu token
+    testMail() {
+        this.mailerService.sendMail({
+            to: 'ghghghghqn123@gmail.com',
+            // from: '',
+            subject: 'Testing',
+            text: 'Welcome',
+            html: '<b>Hello world</b>'
+        });
+        return 'ok';
     }
 }
