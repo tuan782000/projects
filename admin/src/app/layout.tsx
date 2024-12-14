@@ -19,7 +19,12 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body className={inter.className}>
-                <AntdRegistry>{children}</AntdRegistry>
+                <AntdRegistry>
+                    {/* không nên thay đổi ở đây nó ảnh hưởng toàn bộ - ví dụ  */}
+                    {/* <div className=''>div root</div> */}
+                    {/* Tuy duy từ trong ra ngoài vẽ hết bên trong - trình bày ở đây */}
+                    {children}
+                </AntdRegistry>
             </body>
         </html>
     );
